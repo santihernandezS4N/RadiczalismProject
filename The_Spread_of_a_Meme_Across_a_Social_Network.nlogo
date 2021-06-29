@@ -1,6 +1,6 @@
 globals [color-mode pop] ;; 0 = default, 1 = source, 2 = times heard, 3 = popularity
 
-turtles-own [popularity trendy? trend-setter? interest-category trend-category trend-source times-heard]
+turtles-own [popularity trendy? trend-setter? interest-category trend-category trend-source times-heard untrendy?]
 ;; popularity is a number value representing the degree of each turtle
 ;; trendy? is a boolean that is true if the person follows the trend
 ;; trend-setter? is a boolean that is true if the person is seeded the trend (i.e. the overall trend-starter)
@@ -49,6 +49,12 @@ to make-node [old-node]
     set color blue ;; default "no-trend" color is blue
     set interest-category random 10 ;; an "interest type" category corresponding to one of 0-9
     set trend-category -1 ;; -1 corresponds with "no trend"
+    let aleatorio random 10
+    set untrendy? false
+    if aleatorio = 0
+      [
+        set untrendy? true
+      ]
     set times-heard 0
     if old-node != nobody
       [ create-link-with old-node
@@ -150,16 +156,15 @@ to spread-trend
   ;;aquiiiiii
   if target != nobody [
     ask target [
-      ;; diff represents the difference between the turtle's interest category and the category of the trend.
-      ;; the smaller the difference, the higher the probability that the trend will be passed to that turtle.
-      ;; (i.e. if difference = 0, random number is chosen between 0 and 9. if difference = 9, random number is chosen between 0 and 99
-      let diff (interest-category - [trend-category] of myself)
-      if 0 = random (10 * ((abs diff))) [
-        set color red
-        set trendy? true
-
-        set trend-category [trend-category] of myself
-      ]
+      if untrendy? = false
+       [
+          let diff (interest-category - [trend-category] of myself)
+           if 0 = random (10 * (1 + (abs diff))) [
+            set color red
+            set trendy? true
+            set trend-category [trend-category] of myself
+          ]
+       ]
       set times-heard times-heard + 1
     ]
     ;; if a trend spreads between 2 turtles, turn the link between them red
