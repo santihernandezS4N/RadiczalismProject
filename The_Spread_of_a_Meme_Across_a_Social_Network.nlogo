@@ -134,12 +134,25 @@ to seed-trend
       set size 1.5 ;; distinguish the trend-setter
     ]
    ]
+  repeat population / 100 [
+    ask one-of turtles [
+      set color green
+      set untrendy? true
+      set trend-setter? true
+      set trend-category interest-category ;; trend is given a "type" corresponding to the turtle's interest
+      set times-heard 1
+      set size 1.5 ;; distinguish the trend-setter
+    ]
+   ]
 end
 
 ;; run the model
 to go
   ask turtles with [trendy? = true][ ;; ask the trendy turtles to spread the trend
     spread-trend
+  ]
+  ask turtles with [untrendy? = true][ ;; ask the trendy turtles to spread the trend
+      unspread-trend
   ]
   ;; fit to the chosen color-mode
   recolor
@@ -182,6 +195,38 @@ to spread-trend
   ]
 end
 
+to unspread-trend
+  ;; turtles try to spread the trend to one of their linked neighbors
+  let target nobody
+  set target one-of link-neighbors
+  ;;aquiiiiii
+  if target != nobody [
+    ask target [
+      if trendy? = false
+       [
+           if trend-category > random 10 [
+            set color green
+            set untrendy? true
+            set trend-category [trend-category] of myself
+          ]
+       ]
+      set times-heard times-heard + 1
+    ]
+    ;; if a trend spreads between 2 turtles, turn the link between them red
+    ;; (or blue or green-83 depending on the color-mode)
+    ask links [
+      if all? both-ends [untrendy? = true]
+        [ ifelse color-mode = 0 or color-mode = 1
+          [set color green]
+          [ifelse color-mode = 2
+            [set color blue]
+            [set color 83]
+          ]
+        ]
+    ]
+  ]
+end
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;Recoloring Procedures;;;
@@ -193,7 +238,11 @@ to recolor-default
   ask turtles [
     ifelse trendy? = true
       [set color red]
-      [set color blue]
+    [
+        ifelse untrendy? = true
+            [set color green]
+        [set color blue]
+    ]
   ]
   ask patches with [category = -1] [set pcolor black]
   ask links with [color = 83 or color = blue] [set color red]
