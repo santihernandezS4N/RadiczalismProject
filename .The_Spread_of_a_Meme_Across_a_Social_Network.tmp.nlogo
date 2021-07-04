@@ -129,7 +129,7 @@ to seed-trend
      ask one-of turtles [
        set color red
        set trendy? true
-       set untrendy? false
+
        set trend-setter? true
        set trend-category interest-category ;; trend is given a "type" corresponding to the turtle's interest
        set times-heard 1
