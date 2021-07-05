@@ -124,7 +124,8 @@ to seed-trend
   ask turtles [
     set popularity count my-links
   ]
-  repeat population / 100 [
+  let initial (((random InitialInfectedPercentage) + 1) * population) / 100
+  repeat initial [
     ask one-of turtles [
       set color red
       set trendy? true
@@ -134,7 +135,7 @@ to seed-trend
       set size 1.5 ;; distinguish the trend-setter
     ]
    ]
-  repeat population / 100 [
+  repeat initial [
     ask one-of turtles [
       set color green
       set untrendy? true
@@ -336,10 +337,10 @@ NIL
 1
 
 BUTTON
-109
-274
-196
-317
+106
+357
+193
+400
 spread trend
 go
 T
@@ -353,10 +354,10 @@ NIL
 0
 
 MONITOR
-204
-273
-352
-318
+201
+356
+349
+401
 Popularity of Trend-Setter
 [popularity] of one-of turtles with [trend-setter? = true]
 17
@@ -442,15 +443,14 @@ true
 true
 "" ""
 PENS
-"All" 1.0 0 -16777216 true "" "plot count turtles with [trendy? = true]"
-"From Friend" 1.0 0 -2674135 true "" "plot count turtles with [trend-source = \"friend\"]"
-"From Media" 1.0 0 -1184463 true "" "plot count turtles with [trend-source = \"media\"]"
+"All" 1.0 0 -5298144 true "" "plot count turtles with [trendy? = true]"
+"From Friend" 1.0 0 -14439633 true "" "plot count turtles with [untrendy? = true]"
 
 BUTTON
 97
-373
+448
 268
-406
+481
 recolor-default
 set color-mode 0\nrecolor-default
 NIL
@@ -465,9 +465,9 @@ NIL
 
 BUTTON
 8
-418
+493
 180
-451
+526
 recolor-by-times-heard
 set color-mode 2\nrecolor-by-times-heard
 NIL
@@ -482,9 +482,9 @@ NIL
 
 BUTTON
 189
-418
+493
 359
-451
+526
 recolor-by-popularity
 set color-mode 3\nrecolor-by-popularity
 NIL
@@ -509,10 +509,10 @@ modes [interest-category] of turtles with [trendy? = true]
 11
 
 BUTTON
-25
-274
-102
-317
+22
+357
+99
+400
 seed-trend
 if not any? turtles with [trend-setter? = true] [seed-trend]
 NIL
@@ -598,10 +598,10 @@ TEXTBOX
 1
 
 TEXTBOX
-116
-228
-241
-246
+113
+311
+238
+329
 Spread the Meme
 14
 0.0
@@ -609,13 +609,28 @@ Spread the Meme
 
 TEXTBOX
 124
-348
+423
 274
-366
+441
 Choose a Color Mode
 14
 0.0
 1
+
+SLIDER
+52
+263
+307
+296
+InitialInfectedPercentage
+InitialInfectedPercentage
+1
+15
+4.0
+1
+1
+%
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
