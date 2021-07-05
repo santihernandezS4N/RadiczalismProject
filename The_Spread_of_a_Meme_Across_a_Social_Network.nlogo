@@ -125,7 +125,8 @@ to seed-trend
   ask turtles [
     set popularity count my-links
   ]
-  repeat population / 100 [
+  let initial (((random InitialInfectedPercentage) + 1) * population) / 100
+  repeat initial [
      ask one-of turtles [
        set color red
        set trendy? true
@@ -267,7 +268,7 @@ population
 population
 0
 1000
-300.0
+800.0
 1
 1
 NIL
@@ -292,9 +293,9 @@ NIL
 
 BUTTON
 109
-340
+389
 196
-383
+432
 spread trend
 go
 T
@@ -309,9 +310,9 @@ NIL
 
 MONITOR
 204
-339
+388
 352
-384
+433
 Popularity of Trend-Setter
 [popularity] of one-of turtles with [trend-setter? = true]
 17
@@ -379,9 +380,9 @@ PENS
 
 BUTTON
 97
-439
+488
 268
-472
+521
 recolor-default
 set color-mode 0\nrecolor-default
 NIL
@@ -396,9 +397,9 @@ NIL
 
 BUTTON
 8
-484
+533
 180
-517
+566
 recolor-by-times-heard
 set color-mode 2\nrecolor-by-times-heard
 NIL
@@ -413,9 +414,9 @@ NIL
 
 BUTTON
 189
-484
+533
 359
-517
+566
 recolor-by-popularity
 set color-mode 3\nrecolor-by-popularity
 NIL
@@ -441,9 +442,9 @@ modes [interest-category] of turtles with [trendy? = true]
 
 BUTTON
 25
-340
+389
 102
-383
+432
 seed-trend
 if not any? turtles with [trend-setter? = true] [seed-trend]
 NIL
@@ -530,9 +531,9 @@ TEXTBOX
 
 TEXTBOX
 116
-294
+343
 241
-312
+361
 Spread radicalism
 14
 0.0
@@ -540,9 +541,9 @@ Spread radicalism
 
 TEXTBOX
 124
-414
+463
 274
-432
+481
 Choose a Color Mode
 14
 0.0
@@ -560,7 +561,22 @@ radicalismLevel
 20.0
 1
 1
-NIL
+%
+HORIZONTAL
+
+SLIDER
+30
+290
+334
+323
+InitialInfectedPercentage
+InitialInfectedPercentage
+0
+15
+15.0
+1
+1
+%
 HORIZONTAL
 
 @#$#@#$#@
